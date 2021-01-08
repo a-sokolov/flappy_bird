@@ -4,15 +4,20 @@ const ctx = cvs.getContext('2d')
 // Картинки
 const images = {
   bird: new Image(),
-  bg: new Image(),
+  bg_day: new Image(),
+  bg_night: new Image(),
   fg: new Image(),
   pipeTop: new Image(),
   pipeBottom: new Image(),
   gameOver: new Image()
 }
 
-images.bird.src = 'assets/bird.png'
-images.bg.src = 'assets/bg.png'
+const BirdColors = ['yellow', 'blue', 'red']
+const birdColor = BirdColors[Math.floor(Math.random() * BirdColors.length)]
+
+images.bird.src = `assets/${birdColor}_bird.png`
+images.bg_day.src = 'assets/background_day.png'
+images.bg_night.src = 'assets/background_night.png'
 images.fg.src = 'assets/base.png'
 images.pipeTop.src = 'assets/pipe_top.png'
 images.pipeBottom.src = 'assets/pipe_bottom.png'
@@ -32,7 +37,9 @@ sounds.gameOver.src = 'assets/game_over.mp3'
 sounds.crash.src = 'assets/crash.mp3'
 
 // Флаг, что проигрываем аудио
-const SOUND_ON = false
+const SOUND_ON = true
+// Режим бога
+const GOD_MODE_ON = false
 // Клавиша прыжка - Space
 const JUMP_EVENT_KEY = 32
 // Клавиша паузы - P
@@ -43,6 +50,10 @@ const SPEED = 2
 const GRAVITY = 0.35
 // Кол-во мсек для перезагрузки страницы
 const RELOAD_PAGE_AFTER = 1500
+// Коэффициент поворота картинки
+const ROTATE_IMAGE_RATIO = 0.09
+// Время смены времени суток в секундах
+const CHANGE_TIMES_OF_DAY = 20
 
 // Флаг, что игра остановлена и не нужно больше отрисовывать следующий фрейм
 let isStopGame = false
@@ -80,7 +91,7 @@ const game = {
   // Следующее движение птички
   birdMovement: 0,
   // Кол-во очков
-  scores: 0,
+  score: 0,
   // Текущий статус
   status: GameStatus.pending,
   // Массив труб
@@ -112,11 +123,11 @@ const stopGame = () => {
 }
 
 // Функция для отображения полученных игровых очков
-const showScores = (scores) => {
+const showScore = (score) => {
   ctx.fillStyle = '#000'
   ctx.font = '20px Verdana'
   ctx.textAlign = 'left'
-  ctx.fillText(`Scores: ${scores}`, 10, cvs.height - 20)
+  ctx.fillText(`Score: ${score}`, 10, cvs.height - 15)
 }
 
 // Функция для паузы игры
@@ -132,7 +143,7 @@ const pauseGame = () => {
 
 // Функция для возобновления игры после паузы
 const resumeGame = () => {
-  game.animationId = requestAnimationFrame(draw)
+  game.animationId = requestAnimationFrame(doAnimation)
 }
 
 // Отрисовка "Конец игры"
@@ -165,10 +176,20 @@ const getSpeed = () => {
   return game.isGameOver ? 0 : SPEED;
 }
 
+// Функция для поворота картинки
+const rotatedDrawImage = (image, fromX, fromY, angle) => {
+  ctx.save();
+  ctx.translate(fromX + image.width / 2, fromY + image.height / 2);
+  ctx.rotate(angle);
+  ctx.translate(-(fromX + image.width / 2), -(fromY + image.height / 2));
+  ctx.drawImage(image, fromX, fromY)
+  ctx.restore()
+}
+
 // Функция для отрисовки птички
 const drawBird = () => {
-  const { status } = game;
-  const { bird } = images
+  const {status} = game;
+  const {bird} = images
 
   if (status !== GameStatus.pending) {
     // Если не в ожидании, то к движению прибавляем гравитацию
@@ -180,11 +201,10 @@ const drawBird = () => {
       game.birdYPos = FLOOR_Y_POSITION - bird.height
     }
   }
-
-  ctx.drawImage(images.bird, BIRD_X_POSITION, game.birdYPos)
+  rotatedDrawImage(images.bird, BIRD_X_POSITION, game.birdYPos, game.birdMovement * ROTATE_IMAGE_RATIO)
 }
 
-// Функция для отрисовки движения пол.
+// Функция для отрисовки движения пола
 const drawFloor = () => {
   const { fg } = images
 
@@ -204,11 +224,6 @@ const createPipe = () => {
     x: cvs.width,
     // Y позиция вычисляется случайным образом
     y: Math.floor(Math.random() * pipeTop.height) - pipeTop.height
-  }
-
-  if (top.y === 0) {
-    // Если Y позиция равна 0, то корректируем её чтобы правильно отработало позиционирование высоты
-    top.y--
   }
 
   // Вычисляем дельту высоты верхней трубы
@@ -251,14 +266,14 @@ const drawPipes = (pipes, callback) => {
 // Проверка, что квадрат птички пересекает игровые поверхности (трубы, пол)
 const checkCollision = (pipes) => {
   const { birdYPos } = game
-  const { pipeTop, bird, fg } = images
+  const { pipeTop, pipeBottom, bird } = images
 
   return pipes.some((pipe) => {
     const { top, bottom } = pipe
 
     const birdRect = { x: BIRD_X_POSITION, y: birdYPos, width: bird.width, height: bird.height }
     const topRect = { x: top.x, y: top.y, width: pipeTop.width, height: pipeTop.height }
-    const bottomRect = { x: bottom.x, y: bottom.y, width: pipeTop.width, height: pipeTop.height }
+    const bottomRect = { x: bottom.x, y: bottom.y, width: pipeBottom.width, height: pipeBottom.height }
 
     return checkRectCollision(birdRect, topRect) || checkRectCollision(birdRect, bottomRect)
   }) || FLOOR_Y_POSITION <= (birdYPos + bird.height)
@@ -271,31 +286,50 @@ const checkRectCollision = (rect1, rect2) => {
     rect1.y + rect1.height > rect2.y)
 }
 
+let dayTimer = 0
+let backgroundImage = images.bg_day
+
+// Запускаем интервал, который будет прибавлять +1 секунду к игровому времени
+setInterval(() => {
+  const {status, isGameOver} = game
+  if (status !== GameStatus.pending && status !== GameStatus.paused && !isGameOver) {
+    dayTimer++
+  }
+}, 1000)
+
 // Функция для отрисовки кадра анимации
-const draw = () => {
-  const { bg, pipeTop } = images
-  const { pipes, scores, status } = game
+const doAnimation = (timestamp) => {
+  let pauseAfterAll = false
+  const {bg_day, bg_night, pipeTop} = images
+  const {pipes, status} = game
+
+  if (dayTimer >= CHANGE_TIMES_OF_DAY) {
+    dayTimer = 0
+    backgroundImage = backgroundImage === bg_day ? bg_night : bg_day
+  }
+
   // Рисуем фон
-  ctx.drawImage(bg, 0, 0)
+  ctx.drawImage(backgroundImage, 0, 0)
 
   if (status !== GameStatus.pending) {
     drawPipes(pipes, (pipe) => {
       if ((pipe.top.x + pipeTop.width) === BIRD_X_POSITION) {
         // Если X позиция птички дальше трубы, то прибавляем 1 очко
-        game.scores++
+        game.score++
         playAudio(sounds.score)
       }
     })
 
-    if (checkCollision(pipes)) {
+    if (checkCollision(pipes) && !GOD_MODE_ON) {
       if (!game.isGameOver) {
         playAudio(sounds.crash)
         game.isGameOver = true
+        pauseAfterAll = true
       }
     }
 
-    if (pipes.find((pipe) => pipe.top.x + pipeTop.width < 0)) {
-      // Как только пара труб ушла за границу экрана, то удаляем её массива, т.к. она больше не нужна
+    if (pipes[0].top.x + pipeTop.width < 0) {
+      // Как только пара труб ушла за границу экрана, то удаляем её из массива, т.к. она больше не нужна
       game.pipes.shift()
     }
   }
@@ -303,36 +337,42 @@ const draw = () => {
   // Рисуем пол
   drawFloor()
   // Отображаем очки
-  showScores(scores)
+  showScore(game.score)
 
-  if (game.isGameOver) {
-    // Если игрок проиграл, то рисуем анимацию "падения птички до пола"
-    gameOverAnimation(() => {
-      // Как только птичка упала, то показываем лейбл окончания игры
-      drawGameOver()
-      // Останавливаем игру (отменяем анимацию)
-      stopGame()
-      isStopGame = true
-
-      // Через заданное время перегружаем страницу
-      setTimeout(() => location.reload(), RELOAD_PAGE_AFTER)
-    })
+  if (pauseAfterAll) {
+    drawBird()
+    stopGame()
+    setTimeout(() => resumeGame(), 500)
   } else {
-    // Рисуем птичку
-    !isStopGame && drawBird()
-  }
+    if (game.isGameOver) {
+      // Если игрок проиграл, то рисуем анимацию "падения птички до пола"
+      gameOverAnimation(() => {
+        // Как только птичка упала, то показываем лейбл окончания игры
+        drawGameOver()
+        // Останавливаем игру (отменяем анимацию)
+        stopGame()
+        isStopGame = true
 
-  if (!isStopGame) {
-    // Запрос на следующий кадр
-    game.animationId = requestAnimationFrame(draw)
+        // Через заданное время перегружаем страницу
+        setTimeout(() => location.reload(), RELOAD_PAGE_AFTER)
+      })
+    } else {
+      // Рисуем птичку
+      !isStopGame && drawBird()
+    }
+
+    if (!isStopGame) {
+      // Запрос на следующий кадр
+      game.animationId = requestAnimationFrame(doAnimation)
+    }
   }
 }
 
 // Как только загрузится последняя картинка, запускаем анимацию
-images.pipeBottom.onload = () => {
+images.pipeTop.onload = () => {
   // Создаем первую пару труб
   game.pipes.push(createPipe())
-  draw()
+  game.animationId = requestAnimationFrame(doAnimation)
 }
 
 // Функция для прослушки нажатия клавиш
