@@ -3,7 +3,13 @@ const ctx = cvs.getContext('2d')
 
 // Картинки
 const images = {
-  bird: new Image(),
+  bird: null,
+  prevBird: null,
+  birdPositions: {
+    up: new Image(),
+    middle: new Image(),
+    down: new Image(),
+  },
   bg_day: new Image(),
   bg_night: new Image(),
   fg: new Image(),
@@ -15,7 +21,11 @@ const images = {
 const BirdColors = ['yellow', 'blue', 'red']
 const birdColor = BirdColors[Math.floor(Math.random() * BirdColors.length)]
 
-images.bird.src = `assets/${birdColor}_bird.png`
+images.birdPositions.up.src = `assets/${birdColor}bird-upflap.png`
+images.birdPositions.middle.src = `assets/${birdColor}bird-midflap.png`
+images.birdPositions.down.src = `assets/${birdColor}bird-downflap.png`
+images.bird = images.birdPositions.middle
+images.prevBird = images.birdPositions.middle
 images.bg_day.src = 'assets/background_day.png'
 images.bg_night.src = 'assets/background_night.png'
 images.fg.src = 'assets/base.png'
@@ -56,10 +66,6 @@ const RESUME_GAME_AFTER_PAUSE = 500
 const ROTATE_IMAGE_RATIO = 0.09
 // Время смены времени суток в секундах
 const CHANGE_TIMES_OF_DAY = 20
-
-// Флаг, что игра остановлена и не нужно больше отрисовывать следующий фрейм
-let isStopGame = false
-
 // Y позиция пола
 const FLOOR_Y_POSITION = cvs.height - 65
 // Высота прыжка
@@ -74,6 +80,8 @@ const NEXT_PIPE_POINT = 96
 const PIPE_SPACE_BETWEEN = 110
 // Минимальное высота верхней трубы
 const TOP_PIPE_MINIMUM_HEIGHT = 30
+// Время в мсек когда меняем позицию крыльев птицы
+const BIRD_FLAP_TIME = 200
 
 // Статусы игры
 const GameStatus = {
@@ -105,6 +113,9 @@ const game = {
   // X координата пола
   floorXPos: 0
 }
+
+// Флаг, что игра остановлена и не нужно больше отрисовывать следующий фрейм
+let isStopGame = false
 
 // Функция для остановки проигрывания аудио трека
 const stopAudio = (audio) => {
@@ -203,7 +214,24 @@ const drawBird = () => {
       game.birdYPos = FLOOR_Y_POSITION - bird.height
     }
   }
-  rotatedDrawImage(images.bird, BIRD_X_POSITION, game.birdYPos, game.birdMovement * ROTATE_IMAGE_RATIO)
+
+  rotatedDrawImage(bird, BIRD_X_POSITION, game.birdYPos, game.birdMovement * ROTATE_IMAGE_RATIO)
+}
+
+// Функция для смены положения крыльев птицы
+const changeBirdFlap = () => {
+  const {bird, prevBird, birdPositions} = images
+  const {up, middle, down} = birdPositions
+  switch (bird) {
+    case up:
+    case down:
+      images.bird = middle
+      break
+    case middle:
+      images.bird = prevBird === up ? down : up
+  }
+
+  images.prevBird = bird
 }
 
 // Функция для отрисовки движения пола
@@ -289,6 +317,7 @@ const checkRectCollision = (rect1, rect2) => {
 }
 
 let dayTimer = 0
+let flapTimer = 0
 let backgroundImage = images.bg_day
 
 // Запускаем интервал, который будет прибавлять +1 секунду к игровому времени
@@ -301,6 +330,11 @@ setInterval(() => {
 
 // Функция для отрисовки кадра анимации
 const doAnimation = (timestamp) => {
+  if (timestamp - flapTimer >= BIRD_FLAP_TIME) {
+    changeBirdFlap()
+    flapTimer = timestamp
+  }
+
   let pauseAfterAll = false
   const {bg_day, bg_night, pipeTop} = images
   const {pipes, status} = game
