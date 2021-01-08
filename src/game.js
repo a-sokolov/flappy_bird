@@ -1,5 +1,5 @@
-const cvs = document.getElementById('canvas')
-const ctx = cvs.getContext('2d')
+const canvas = document.getElementById('canvas')
+const ctx = canvas.getContext('2d')
 
 // Картинки
 const images = {
@@ -67,13 +67,13 @@ const ROTATE_IMAGE_RATIO = 0.09
 // Время смены времени суток в секундах
 const CHANGE_TIMES_OF_DAY = 20
 // Y позиция пола
-const FLOOR_Y_POSITION = cvs.height - 65
+const FLOOR_Y_POSITION = canvas.height - 65
 // Высота прыжка
 const BIRD_JUMP_POINTS = 6
 // X позиция птички
 const BIRD_X_POSITION = 30
 // Y позиция птички
-const BIRD_Y_POSITION = cvs.height / 2
+const BIRD_Y_POSITION = canvas.height / 2
 // Позиция отрисовки следующей трубы
 const NEXT_PIPE_POINT = 96
 // Расстояние между верхней и нижней трубой
@@ -140,7 +140,7 @@ const showScore = (score) => {
   ctx.fillStyle = '#000'
   ctx.font = '20px Verdana'
   ctx.textAlign = 'left'
-  ctx.fillText(`Score: ${score}`, 10, cvs.height - 15)
+  ctx.fillText(`Score: ${score}`, 10, canvas.height - 15)
 }
 
 // Функция для паузы игры
@@ -149,7 +149,7 @@ const pauseGame = () => {
   ctx.font = '24px Verdana'
   ctx.textBaseline = 'center'
   ctx.textAlign = 'center'
-  ctx.fillText('Pause', cvs.width / 2, cvs.height / 2)
+  ctx.fillText('Pause', canvas.width / 2, canvas.height / 2)
 
   stopGame()
 }
@@ -164,7 +164,7 @@ const drawGameOver = () => {
   playAudio(sounds.gameOver)
 
   const { gameOver } = images
-  ctx.drawImage(gameOver, cvs.width / 2 - gameOver.width / 2, cvs.height / 2 - gameOver.height)
+  ctx.drawImage(gameOver, canvas.width / 2 - gameOver.width / 2, canvas.height / 2 - gameOver.height)
 }
 
 // Запуск анимации, когда игрок проиграл (птичка падает вниз)
@@ -240,7 +240,7 @@ const drawFloor = () => {
 
   game.floorXPos -= getSpeed()
   ctx.drawImage(fg, game.floorXPos, FLOOR_Y_POSITION)
-  if (game.floorXPos <= cvs.width - fg.width) {
+  if (game.floorXPos <= canvas.width - fg.width) {
     // Как только X позиция "уедет за экран", то сразу сбрасываем на 0, для имитации бесконечного движения
     game.floorXPos = 0
   }
@@ -251,7 +251,7 @@ const createPipe = () => {
   const { pipeTop } = images
 
   const top = {
-    x: cvs.width,
+    x: canvas.width,
     // Y позиция вычисляется случайным образом
     y: Math.floor(Math.random() * pipeTop.height) - pipeTop.height
   }
@@ -264,7 +264,7 @@ const createPipe = () => {
   }
 
   const bottom = {
-    x: cvs.width,
+    x: canvas.width,
     y: top.y + pipeTop.height + PIPE_SPACE_BETWEEN
   }
 
@@ -417,7 +417,7 @@ const keydownListener = (event) => {
   const { status, isGameOver, birdYPos } = game;
 
   if (!isGameOver) {
-    if (event.which === JUMP_EVENT_KEY && status !== GameStatus.paused) {
+    if (event.keyCode === JUMP_EVENT_KEY && status !== GameStatus.paused) {
       // Если нажата клавиша прыжка и игра не стоит на паузе, то присваиваем статус "идет"
       game.status = GameStatus.running
 
@@ -431,7 +431,7 @@ const keydownListener = (event) => {
       playAudio(sounds.jump)
     }
 
-    if (event.which === PAUSE_EVENT_KEY && status !== GameStatus.pending) {
+    if (event.keyCode === PAUSE_EVENT_KEY && status !== GameStatus.pending) {
       // Если нажали паузу и игра не в ожидании, то меняем статус между "идет" и "пауза"
       game.status = status === GameStatus.paused ? GameStatus.running : GameStatus.paused
 
