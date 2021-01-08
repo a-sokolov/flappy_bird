@@ -50,6 +50,8 @@ const SPEED = 2
 const GRAVITY = 0.35
 // Кол-во мсек для перезагрузки страницы
 const RELOAD_PAGE_AFTER = 1500
+// Кол-во мсек для возврата в игру после паузы
+const RESUME_GAME_AFTER_PAUSE = 500
 // Коэффициент поворота картинки
 const ROTATE_IMAGE_RATIO = 0.09
 // Время смены времени суток в секундах
@@ -340,9 +342,10 @@ const doAnimation = (timestamp) => {
   showScore(game.score)
 
   if (pauseAfterAll) {
+    // Если необходима пауза
     drawBird()
     stopGame()
-    setTimeout(() => resumeGame(), 500)
+    setTimeout(() => resumeGame(), RESUME_GAME_AFTER_PAUSE)
   } else {
     if (game.isGameOver) {
       // Если игрок проиграл, то рисуем анимацию "падения птички до пола"
