@@ -33,7 +33,7 @@ module.exports = {
         use: ['style-loader', 'css-loader']
       },
       {
-        test: /\.png$/,
+        test: /\.(png|mp3)$/,
         use: 'file-loader'
       }
     ]

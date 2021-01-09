@@ -35,6 +35,10 @@ export class Screen {
     })
   }
 
+  getImage(name) {
+    return this.images[name]
+  }
+
   fill(color) {
     this.context.fillStyle = color
     this.context.fillRect(0, 0, this.width, this.height)
@@ -47,6 +51,12 @@ export class Screen {
   }
 
   drawImage(name, x = 0, y = 0) {
-    this.context.drawImage(this.images[name], x, y)
+    const image = this.images[name]
+    this.context.drawImage(image, x, y)
+  }
+
+  drawImageByCenter(name) {
+    const image = this.images[name]
+    this.context.drawImage(image, this.width / 2 - image.width / 2, this.height / 2 - image.height / 2)
   }
 }
