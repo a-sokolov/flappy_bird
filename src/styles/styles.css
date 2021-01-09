@@ -2,7 +2,7 @@ body {
   margin: 0
 }
 
-.Root {
+#root {
   display: flex;
   flex-direction: column;
   justify-content: center;

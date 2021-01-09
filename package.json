@@ -1,0 +1,41 @@
+{
+  "name": "flappy_bird",
+  "version": "1.0.0",
+  "description": "Flappy Bird game",
+  "private": true,
+  "scripts": {
+    "dev": "webpack --mode development",
+    "build": "webpack --mode production",
+    "server": "webpack serve"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/a-sokolov/flappy_bird.git"
+  },
+  "keywords": [
+    "js",
+    "canvas",
+    "game",
+    "flappy-bird"
+  ],
+  "author": "a.sokolov.store@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/a-sokolov/flappy_bird/issues"
+  },
+  "homepage": "https://github.com/a-sokolov/flappy_bird#readme",
+  "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "babel-loader": "^8.2.2",
+    "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^7.0.0",
+    "css-loader": "^5.0.1",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^4.5.1",
+    "style-loader": "^2.0.0",
+    "webpack": "^5.12.2",
+    "webpack-cli": "^4.3.1",
+    "webpack-dev-server": "^3.11.1"
+  }
+}
