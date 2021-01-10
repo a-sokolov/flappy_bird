@@ -45,7 +45,7 @@ module.exports = {
     new HTMLWebpackPlugin({
       title: 'Flappy Bird',
       template: './public/index.html',
-      favicon: './public/favicon.png',
+      favicon: './public/favicon.ico',
       version: PACKAGE.version
     }),
     new CleanWebpackPlugin(),
