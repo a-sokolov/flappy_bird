@@ -5,19 +5,19 @@ export class DrawFloor extends ScenePart {
   constructor(scene) {
     super(scene)
 
-    this.game = scene.game
     this.floorXPosition = 0
   }
 
   init() {
     super.init()
+
     this.floorXPosition = 0
   }
 
   render(time) {
     super.render(time)
 
-    const { screen } = this.game
+    const { screen } = this.scene.game
 
     this.floorXPosition--
     screen.drawImage(ImageType.floor, this.floorXPosition, screen.height - 65)

@@ -3,6 +3,23 @@
 body {
   margin: 0;
   font-family: '04b19', sans-serif;
+  user-select: none;
+}
+
+.version {
+  padding-top: 1em;
+  text-align: center;
+  font-size: 0.5em;
+}
+
+.help {
+  padding-bottom: 1em;
+  text-align: center;
+  font-size: 0.75em;
+}
+
+.help > p {
+  margin: 0.5em;
 }
 
 #root {

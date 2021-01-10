@@ -16,6 +16,8 @@ export class ControlState {
 
     document.addEventListener('keydown', event => this.update(event, true))
     document.addEventListener('keyup', event => this.update(event, false))
+    document.addEventListener('mousedown', event => this.mouseUpdate(event, true))
+    document.addEventListener('mouseup', event => this.mouseUpdate(event, false))
   }
 
   update(event, pressed) {
@@ -28,6 +30,16 @@ export class ControlState {
       pressed && this.notify(key)
 
       console.log(this)
+    }
+  }
+
+  mouseUpdate(event, pressed) {
+    if (event.button === 0 && event.target.localName === 'canvas') {
+      console.log(event)
+
+      const key = HotKeys.JUMP
+      this[key.toLowerCase()] = pressed
+      pressed && this.notify(key)
     }
   }
 

@@ -1,8 +1,20 @@
 import { ImageType, AudioType } from './interfaces'
 
+export const PROGRESS_DOT_COUNT = 3
+export const SHOW_PROGRESS_TIMEOUT = 200
+export const LOADING_PROGRESS_TIMEOUT = 1500
+export const BIRD_X_POSITION = 30
+export const BIRD_FLAP_TIME = 200
+export const BIRD_PENDING_Y_GAP = 7
+export const BIRD_PENDING_STEP = 0.5
+
 export const GAME_DEFINITION = {
   width: 288,
-  height: 512
+  height: 512,
+  font: {
+    size: '22px',
+    name: '04b19'
+  }
 }
 
 export const IMAGES = {

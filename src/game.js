@@ -31,6 +31,7 @@ export class Game {
 
     this.animationId = 0
     this.isPause = false
+    this.highScore = 10
 
     this.pause = this.pause.bind(this)
     this.menu = this.menu.bind(this)

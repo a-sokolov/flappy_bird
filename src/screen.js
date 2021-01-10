@@ -1,4 +1,5 @@
 import { ImageLoader } from './loaders/image-loader'
+import { GAME_DEFINITION } from './constants';
 
 export class Screen {
   constructor(width, height) {
@@ -11,7 +12,7 @@ export class Screen {
   }
 
   createCanvas(width, height) {
-    const root = document.getElementById('root')
+    const root = document.getElementById('container')
     const elements = root.getElementsByTagName('canvas')
     if (elements.length) {
       return elements[0]
@@ -45,9 +46,21 @@ export class Screen {
   }
 
   print(text, x, y) {
+    const { name, size } = GAME_DEFINITION.font
+
     this.context.fillStyle = 'white'
-    this.context.font = 'bold 22px 04b19'
+    this.context.font = `${size} "${name}"`
     this.context.fillText(text, x, y)
+  }
+
+  printByCenter(text) {
+    this.context.textAlign = 'center'
+    this.print(text, this.width / 2, this.height / 2)
+  }
+
+  printByXCenter(text, y) {
+    this.context.textAlign = 'center'
+    this.print(text, this.width / 2, y)
   }
 
   drawImage(name, x = 0, y = 0) {

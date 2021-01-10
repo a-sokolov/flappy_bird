@@ -1,8 +1,5 @@
 import { Scene } from '../scene'
-
-const PROGRESS_DOT_COUNT = 3
-const SHOW_PROGRESS_TIMEOUT = 200
-const LOADING_PROGRESS_TIMEOUT = 1500
+import { SHOW_PROGRESS_TIMEOUT, PROGRESS_DOT_COUNT, LOADING_PROGRESS_TIMEOUT } from '../constants'
 
 export class Loading extends Scene {
   constructor(game) {
@@ -16,6 +13,7 @@ export class Loading extends Scene {
 
   init() {
     super.init()
+
     this.loadedAt = 0
     this.progress = 0
     this.game.intervals.addInterval(SHOW_PROGRESS_TIMEOUT, this.showProgress)
@@ -46,10 +44,12 @@ export class Loading extends Scene {
 
   render(time) {
     super.render(time)
+
     this.update(time)
 
-    const {screen} = this.game
+    const { screen } = this.game
+
     screen.fill('black')
-    screen.print(`Loading${'.'.repeat(this.progress)}`, 10, 30)
+    screen.printByCenter(`Loading${'.'.repeat(this.progress)}`)
   }
 }
