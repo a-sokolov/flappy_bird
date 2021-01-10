@@ -1,5 +1,6 @@
 import { Scene } from '../scene'
 import { DrawFloor } from './parts/draw-floor'
+import { HotKeys, ImageType } from '../interfaces'
 
 export class GameLevel extends Scene {
   constructor(game) {
@@ -11,12 +12,12 @@ export class GameLevel extends Scene {
   init() {
     super.init()
     this.addScenePart(new DrawFloor(this))
-    this.game.control.addListener('restart', this.restart)
+    this.game.control.addListener(HotKeys.RESTART, this.restart)
   }
 
   destroy() {
     super.destroy()
-    this.game.control.removeListener('restart', this.restart)
+    this.game.control.removeListener(HotKeys.RESTART, this.restart)
   }
 
   restart() {
@@ -24,7 +25,7 @@ export class GameLevel extends Scene {
   }
 
   render(time) {
-    this.game.screen.drawImage('backgroundDay')
+    this.game.screen.drawImage(ImageType.backgroundDay)
 
     super.render(time)
   }

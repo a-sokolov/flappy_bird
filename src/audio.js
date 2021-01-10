@@ -1,4 +1,4 @@
-import { AudioLoader } from './audio-loader'
+import { AudioLoader } from './loaders/audio-loader'
 
 export class Audio {
   constructor() {

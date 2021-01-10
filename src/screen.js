@@ -1,4 +1,4 @@
-import { ImageLoader } from './image-loader'
+import { ImageLoader } from './loaders/image-loader'
 
 export class Screen {
   constructor(width, height) {
@@ -46,7 +46,7 @@ export class Screen {
 
   print(text, x, y) {
     this.context.fillStyle = 'white'
-    this.context.font = '22px Georgia'
+    this.context.font = 'bold 22px 04b19'
     this.context.fillText(text, x, y)
   }
 

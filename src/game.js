@@ -1,43 +1,25 @@
-import { Screen } from './canvas'
+import { Screen } from './screen'
 import { Audio } from './audio'
 import { Scene } from './scene'
 import { Intervals } from './intervals'
 import { ControlState } from './control-state'
+
+import { IMAGES, AUDIOS, GAME_DEFINITION } from './constants'
+import { HotKeys } from './interfaces'
 
 import { Loading } from './scenes/loading'
 import { Menu } from './scenes/menu'
 import { GameLevel } from './scenes/game-level'
 
 export class Game {
-  constructor({ width = 288, height = 512 }) {
+  constructor(props = {}) {
+    const { width = GAME_DEFINITION.width, height = GAME_DEFINITION.height } = props
+
     this.intervals = new Intervals()
     this.screen = new Screen(width, height)
-    this.screen.loadImages({
-      backgroundDay: './assets/img/background-day.png',
-      backgroundNight: './assets/img/background-night.png',
-      blueBirdDownFlap: './assets/img/bluebird-downflap.png',
-      blueBirdMiddleFlap: './assets/img/bluebird-midflap.png',
-      blueBirdUpFlap: './assets/img/bluebird-upflap.png',
-      floor: './assets/img/floor.png',
-      gameOver: './assets/img/game-over.png',
-      pipeBottom: './assets/img/pipe-bottom.png',
-      pipeTop: './assets/img/pipe-top.png',
-      redBirdDownFlap: './assets/img/redbird-downflap.png',
-      redBirdMiddleFlap: './assets/img/redbird-midflap.png',
-      redBirdUpFlap: './assets/img/redbird-upflap.png',
-      yellowBirdDownFlap: './assets/img/yellowbird-downflap.png',
-      yellowBirdMiddleFlap: './assets/img/yellowbird-midflap.png',
-      yellowBirdUpFlap: './assets/img/yellowbird-upflap.png',
-      menu: './assets/img/menu.png'
-    })
+    this.screen.loadImages(IMAGES)
     this.audio = new Audio()
-    this.audio.loadAudio({
-      fail: './assets/audio/fail.mp3',
-      flap: './assets/audio/flap.mp3',
-      gameOver: './assets/audio/game-over.mp3',
-      jump: './assets/audio/jump.mp3',
-      score: './assets/audio/score.mp3'
-    })
+    this.audio.loadAudio(AUDIOS)
     this.control = new ControlState()
     this.scenes = {
       loading: new Loading(this),
@@ -53,8 +35,8 @@ export class Game {
     this.pause = this.pause.bind(this)
     this.menu = this.menu.bind(this)
 
-    this.control.addListener('pause', this.pause)
-    this.control.addListener('menu', this.menu)
+    this.control.addListener(HotKeys.PAUSE, this.pause)
+    this.control.addListener(HotKeys.MENU, this.menu)
   }
 
   changeScene(status) {
@@ -75,13 +57,13 @@ export class Game {
   }
 
   setScene(scene) {
-    this.currentScene?.destroy()
+    this.currentScene.destroy()
     this.currentScene = scene
     this.currentScene.init()
   }
 
   pause() {
-    if (this.currentScene === this.scenes.gameLevel) {
+    if (this.currentScene instanceof GameLevel) {
       this.isPause = !this.isPause
       this.isPause && this.stop()
       !this.isPause && this.run()
@@ -89,7 +71,7 @@ export class Game {
   }
 
   menu() {
-    if (this.currentScene === this.scenes.gameLevel) {
+    if (this.currentScene instanceof GameLevel) {
       this.setScene(this.scenes.menu)
     }
   }

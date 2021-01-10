@@ -1,5 +1,6 @@
 import { Scene } from '../scene'
-import { DrawFloor } from './parts/draw-floor';
+import { DrawFloor } from './parts/draw-floor'
+import { ImageType } from '../interfaces'
 
 export class Menu extends Scene {
   constructor(game) {
@@ -12,17 +13,14 @@ export class Menu extends Scene {
     this.addScenePart(new DrawFloor(this))
   }
 
-  update(time) {
+  render(time) {
+    this.game.screen.drawImage(ImageType.backgroundDay)
+    this.game.screen.drawImageByCenter(ImageType.menu)
+
     if (this.game.control.jump) {
       this.finish(Scene.START_GAME)
     }
-  }
 
-  render(time) {
-    this.game.screen.drawImage('backgroundDay')
-    this.game.screen.drawImageByCenter('menu')
-
-    this.update(time)
     super.render(time)
   }
 }

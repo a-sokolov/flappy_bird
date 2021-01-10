@@ -1,3 +1,5 @@
+import { HotKeys } from './interfaces'
+
 export class ControlState {
   constructor() {
     this.jump = false
@@ -6,10 +8,10 @@ export class ControlState {
     this.listeners = []
 
     this.keyMap = new Map([
-      [32, 'jump'],
-      [80, 'pause'],
-      [78, 'restart'],
-      [77, 'menu']
+      [32, HotKeys.JUMP],
+      [80, HotKeys.PAUSE],
+      [78, HotKeys.RESTART],
+      [77, HotKeys.MENU]
     ])
 
     document.addEventListener('keydown', event => this.update(event, true))
@@ -22,7 +24,7 @@ export class ControlState {
       event.stopPropagation()
 
       const key = this.keyMap.get(event.keyCode)
-      this[key] = pressed
+      this[key.toLowerCase()] = pressed
       pressed && this.notify(key)
 
       console.log(this)

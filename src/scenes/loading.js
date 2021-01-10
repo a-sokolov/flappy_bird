@@ -1,5 +1,9 @@
 import { Scene } from '../scene'
 
+const PROGRESS_DOT_COUNT = 3
+const SHOW_PROGRESS_TIMEOUT = 200
+const LOADING_PROGRESS_TIMEOUT = 1500
+
 export class Loading extends Scene {
   constructor(game) {
     super(game)
@@ -14,18 +18,18 @@ export class Loading extends Scene {
     super.init()
     this.loadedAt = 0
     this.progress = 0
-    this.game.intervals.addInterval(200, this.showProgress)
+    this.game.intervals.addInterval(SHOW_PROGRESS_TIMEOUT, this.showProgress)
   }
 
   destroy() {
     super.destroy()
 
-    this.game.intervals.removeInterval(200, this.showProgress)
+    this.game.intervals.removeInterval(SHOW_PROGRESS_TIMEOUT, this.showProgress)
   }
 
   showProgress() {
     this.progress++
-    if (this.progress > 3) {
+    if (this.progress > PROGRESS_DOT_COUNT) {
       this.progress = 0
     }
   }
@@ -35,7 +39,7 @@ export class Loading extends Scene {
       this.loadedAt = time
     }
 
-    if (this.loadedAt !== 0 && (time - this.loadedAt) >= 1500) {
+    if (this.loadedAt !== 0 && (time - this.loadedAt) >= LOADING_PROGRESS_TIMEOUT) {
       this.finish(Scene.LOADED)
     }
   }
