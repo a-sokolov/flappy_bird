@@ -44,6 +44,7 @@ export class Game {
     let scene
     switch (status) {
       case Scene.LOADED:
+        this.callbackAfterLoading?.()
         scene = this.scenes.menu
         break
       case Scene.START_GAME:
@@ -87,8 +88,9 @@ export class Game {
     this.animationId = requestAnimationFrame(time => this.frame(time))
   }
 
-  run() {
+  run(callbackAfterLoading) {
     this.animationId = requestAnimationFrame(time => this.frame(time))
+    this.callbackAfterLoading = callbackAfterLoading
   }
 
   stop() {

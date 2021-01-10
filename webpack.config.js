@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 const PACKAGE = require('./package.json')
 
 const HTMLWebpackPlugin = require('html-webpack-plugin')
@@ -52,6 +53,9 @@ module.exports = {
       patterns: [
         { from: "./src/assets", to: "assets" }
       ]
+    }),
+    new webpack.DefinePlugin({
+      __APP_VERSION__: `"FlappyBird (version ${PACKAGE.version})"`
     })
   ],
 };

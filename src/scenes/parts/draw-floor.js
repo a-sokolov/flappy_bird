@@ -1,5 +1,6 @@
 import { ScenePart } from '../../scene-part'
 import { ImageType } from '../../interfaces'
+import { FLOOR_Y_POSITION } from '../../constants'
 
 export class DrawFloor extends ScenePart {
   constructor(scene) {
@@ -20,7 +21,7 @@ export class DrawFloor extends ScenePart {
     const { screen } = this.scene.game
 
     this.floorXPosition--
-    screen.drawImage(ImageType.floor, this.floorXPosition, screen.height - 65)
+    screen.drawImage(ImageType.floor, this.floorXPosition, FLOOR_Y_POSITION)
     if (this.floorXPosition <= screen.width - screen.getImage(ImageType.floor).width) {
       this.floorXPosition = 0
     }

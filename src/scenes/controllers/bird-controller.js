@@ -1,5 +1,14 @@
-import { ImageType } from '../../interfaces';
-import { BIRD_FLAP_TIME, BIRD_X_POSITION, BIRD_PENDING_Y_GAP, BIRD_PENDING_STEP } from '../../constants'
+import { ImageType, HotKeys } from '../../interfaces';
+import {
+  BIRD_FLAP_TIME,
+  BIRD_X_POSITION,
+  BIRD_PENDING_Y_GAP,
+  BIRD_PENDING_STEP,
+  TILES,
+  GAME_GRAVITY,
+  BIRD_JUMP_POINTS,
+  FLOOR_Y_POSITION
+} from '../../constants'
 
 import { SpriteSheet } from '../../sprite-sheet'
 
@@ -7,16 +16,14 @@ export class BirdController {
   constructor(game) {
     this.game = game
     this.baseLine = game.screen.height / 2
-    this.birdTiles = new SpriteSheet({
-      imageName: ImageType.bird,
-      imageWidth: 102,
-      imageHeight: 72,
-      spriteWidth: 34,
-      spriteHeight: 24
-    })
+    this.birdTiles = new SpriteSheet(TILES[ImageType.bird])
+    this.spriteHeight = TILES[ImageType.bird].spriteHeight
+
+    this.jump = this.jump.bind(this)
   }
 
   init() {
+    this.birdMovement = 0
     this.pendingStep = 0
     this.pendingStepIndex = BIRD_PENDING_STEP
     this.x = BIRD_X_POSITION
@@ -33,10 +40,12 @@ export class BirdController {
 
     this.bird = this.birdTiles.getAnimation(spriteIndexes[index], BIRD_FLAP_TIME)
     this.bird.setXY(BIRD_X_POSITION, this.baseLine)
+
+    this.game.control.addListener(HotKeys.JUMP, this.jump)
   }
 
   destroy() {
-    // destroy
+    this.game.control.removeListener(HotKeys.JUMP, this.jump)
   }
 
   pending() {
@@ -50,10 +59,35 @@ export class BirdController {
     }
   }
 
+  jump() {
+    if (this.isPending) {
+      this.isPending = false
+    }
+
+    if (this.y + BIRD_JUMP_POINTS + GAME_GRAVITY > 0) {
+      // Если Y позиция птички + прыжок + гравитация > 0, то добавляем к позиции прыжок.
+      // Иначе, ничего не происходит, чтобы птица не вылетала вверх за пределы экрана
+      this.birdMovement = 0
+      this.birdMovement -= BIRD_JUMP_POINTS
+    }
+  }
+
+  update() {
+    this.birdMovement += GAME_GRAVITY
+    // Инициализируем Y позицию
+    this.y += this.birdMovement
+    if (this.y + this.spriteHeight > FLOOR_Y_POSITION) {
+      // Если Y позиция ниже "пола", то птичка остается на уровне
+      this.y = FLOOR_Y_POSITION - this.spriteHeight
+    }
+  }
+
   render(time) {
     this.bird.update(time)
     if (this.isPending) {
       this.pending()
+    } else {
+      this.update()
     }
 
     this.bird.setXY(this.x, this.y)

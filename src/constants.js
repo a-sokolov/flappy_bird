@@ -1,13 +1,5 @@
 import { ImageType, AudioType } from './interfaces'
 
-export const PROGRESS_DOT_COUNT = 3
-export const SHOW_PROGRESS_TIMEOUT = 200
-export const LOADING_PROGRESS_TIMEOUT = 1500
-export const BIRD_X_POSITION = 30
-export const BIRD_FLAP_TIME = 200
-export const BIRD_PENDING_Y_GAP = 7
-export const BIRD_PENDING_STEP = 0.5
-
 export const GAME_DEFINITION = {
   width: 288,
   height: 512,
@@ -16,6 +8,25 @@ export const GAME_DEFINITION = {
     name: '04b19'
   }
 }
+
+// Кол-во точек при загрузке
+export const LOADING_DOT_COUNT = 3
+// Время анимации точек при загрузке
+export const SHOW_LOADING_TIMEOUT = 200
+// Минимальное ожидание загрузки (чтобы не мигало)
+export const LOADING_PROGRESS_TIMEOUT = 700
+// Позиция пола
+export const FLOOR_Y_POSITION = GAME_DEFINITION.height - 65
+export const BIRD_X_POSITION = 30
+export const BIRD_FLAP_TIME = 200
+export const BIRD_PENDING_Y_GAP = 7
+export const BIRD_PENDING_STEP = 0.5
+// Скорость игры
+export const GAME_SPEED = 2
+// Гравитация
+export const GAME_GRAVITY = 0.35
+// Высота прыжка
+export const BIRD_JUMP_POINTS = 6
 
 export const IMAGES = {
   [ImageType.backgroundDay]: './assets/img/background-day.png',
@@ -26,7 +37,16 @@ export const IMAGES = {
   [ImageType.pipeTop]: './assets/img/pipe-top.png',
   [ImageType.menu]: './assets/img/menu.png',
   [ImageType.bird]: './assets/img/bird.png'
+}
 
+export const TILES = {
+  [ImageType.bird]: {
+    imageName: ImageType.bird,
+    imageWidth: 102,
+    imageHeight: 78,
+    spriteWidth: 34,
+    spriteHeight: 26
+  }
 }
 
 export const AUDIOS = {
