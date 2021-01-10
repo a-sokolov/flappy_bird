@@ -1,75 +1,62 @@
 import { ImageType } from '../../interfaces';
 import { BIRD_FLAP_TIME, BIRD_X_POSITION, BIRD_PENDING_Y_GAP, BIRD_PENDING_STEP } from '../../constants'
 
+import { SpriteSheet } from '../../sprite-sheet'
+
 export class BirdController {
   constructor(game) {
     this.game = game
-
-    this.imageIndex = 0
-    this.prevImageIndex = 0
     this.baseLine = game.screen.height / 2
+    this.birdTiles = new SpriteSheet({
+      imageName: ImageType.bird,
+      imageWidth: 102,
+      imageHeight: 72,
+      spriteWidth: 34,
+      spriteHeight: 24
+    })
+  }
+
+  init() {
     this.pendingStep = 0
     this.pendingStepIndex = BIRD_PENDING_STEP
     this.x = BIRD_X_POSITION
     this.y = this.baseLine
     this.isPending = true
 
-    this.changeBirdFlap = this.changeBirdFlap.bind(this)
-  }
-
-  init() {
     // Randomize bird color
-    const colors = ['red', 'blue', 'yellow']
-    const color = colors[Math.floor(Math.random() * colors.length)]
-
-    this.flapImages = [
-      ImageType[`${color}BirdUpFlap`],
-      ImageType[`${color}BirdMiddleFlap`],
-      ImageType[`${color}BirdDownFlap`]
+    const spriteIndexes = [
+      [1, 2, 1, 3], // blue
+      [4, 5, 4, 6], // red
+      [7, 8, 7, 9] // yellow
     ]
+    const index = Math.floor(Math.random() * spriteIndexes.length)
 
-    this.game.intervals.addInterval(BIRD_FLAP_TIME, this.changeBirdFlap)
+    this.bird = this.birdTiles.getAnimation(spriteIndexes[index], BIRD_FLAP_TIME)
+    this.bird.setXY(BIRD_X_POSITION, this.baseLine)
   }
 
   destroy() {
-    this.game.intervals.removeInterval(BIRD_FLAP_TIME, this.changeBirdFlap)
-  }
-
-  changeBirdFlap() {
-    const currentIndex = this.imageIndex
-
-    switch (this.imageIndex) {
-      case 0:
-      case 2:
-        this.imageIndex = 1
-        break
-      case 1:
-        this.imageIndex = this.prevImageIndex === 0 ? 2 : 0
-    }
-
-    this.prevImageIndex = currentIndex
+    // destroy
   }
 
   pending() {
     this.pendingStep += this.pendingStepIndex
     this.y = this.baseLine + this.pendingStep
-    switch (this.pendingStep) {
-      case BIRD_PENDING_Y_GAP:
-        this.pendingStepIndex = -BIRD_PENDING_STEP
-        break
-      case -BIRD_PENDING_Y_GAP:
-        this.pendingStepIndex = BIRD_PENDING_STEP
-        break
+
+    if (this.pendingStep >= BIRD_PENDING_Y_GAP) {
+      this.pendingStepIndex = -BIRD_PENDING_STEP
+    } else if (this.pendingStep <= -BIRD_PENDING_Y_GAP) {
+      this.pendingStepIndex = BIRD_PENDING_STEP
     }
   }
 
-  render(drawBird, time) {
+  render(time) {
+    this.bird.update(time)
     if (this.isPending) {
       this.pending()
     }
 
-    drawBird.setImage(this.flapImages[this.imageIndex])
-    drawBird.setCoordinates(this.x, this.y)
-    drawBird.render(time)
+    this.bird.setXY(this.x, this.y)
+    this.game.screen.drawSprite(this.bird)
   }
 }

@@ -72,4 +72,11 @@ export class Screen {
     const image = this.images[name]
     this.context.drawImage(image, this.width / 2 - image.width / 2, this.height / 2 - image.height / 2)
   }
+
+  drawSprite(sprite) {
+    const image = this.images[sprite.imageName]
+    this.context.drawImage(image,
+      sprite.sourceX, sprite.sourceY, sprite.width, sprite.height,
+      sprite.x, sprite.y, sprite.width, sprite.height);
+  }
 }

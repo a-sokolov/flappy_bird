@@ -2,7 +2,6 @@ import { Scene } from '../scene'
 
 import { DrawFloor } from './parts/draw-floor'
 import { DrawScore } from './parts/draw-score'
-import { DrawBird } from './parts/draw-bird'
 
 import { BirdController } from './controllers/bird-controller';
 
@@ -15,7 +14,6 @@ export class GameLevel extends Scene {
 
     this.restart = this.restart.bind(this)
 
-    this.drawBird = new DrawBird(this)
     this.birdController = new BirdController(game)
   }
 
@@ -42,7 +40,7 @@ export class GameLevel extends Scene {
 
   render(time) {
     this.game.screen.drawImage(ImageType.backgroundDay)
-    this.birdController.render(this.drawBird, time)
+    this.birdController.render(time)
 
     super.render(time)
   }

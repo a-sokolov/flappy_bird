@@ -16,20 +16,12 @@ const __AudioType = {
 const __ImageType = {
   backgroundDay: 'backgroundDay',
   backgroundNight: 'backgroundNight',
-  blueBirdDownFlap: 'blueBirdDownFlap',
-  blueBirdMiddleFlap: 'blueBirdMiddleFlap',
-  blueBirdUpFlap: 'blueBirdUpFlap',
   floor: 'floor',
   gameOver: 'gameOver',
   pipeBottom: 'pipeBottom',
   pipeTop: 'pipeTop',
-  redBirdDownFlap: 'redBirdDownFlap',
-  redBirdMiddleFlap: 'redBirdMiddleFlap',
-  redBirdUpFlap: 'redBirdUpFlap',
-  yellowBirdDownFlap: 'yellowBirdDownFlap',
-  yellowBirdMiddleFlap: 'yellowBirdMiddleFlap',
-  yellowBirdUpFlap: 'yellowBirdUpFlap',
-  menu: 'menu'
+  menu: 'menu',
+  bird: 'bird'
 }
 
 export const HotKeys = Object.freeze(__HotKeys)
