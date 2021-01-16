@@ -4,7 +4,7 @@ import { Scene } from './scene'
 import { Intervals } from './intervals'
 import { ControlState } from './control-state'
 
-import { IMAGES, AUDIOS, GAME_DEFINITION } from './constants'
+import { IMAGES, AUDIOS, GAME_DEFINITION, GAME_SPEED } from './constants'
 import { HotKeys } from './interfaces'
 
 import { Loading } from './scenes/loading'
@@ -31,7 +31,7 @@ export class Game {
 
     this.animationId = 0
     this.isPause = false
-    this.highScore = 10
+    this.highScore = 0
 
     this.pause = this.pause.bind(this)
     this.menu = this.menu.bind(this)
@@ -96,5 +96,15 @@ export class Game {
   stop() {
     cancelAnimationFrame(this.animationId)
     this.animationId = 0
+  }
+
+  getSpeed() {
+    return GAME_SPEED
+  }
+
+  setHighScore(score) {
+    if (score > this.highScore) {
+      this.highScore = score
+    }
   }
 }

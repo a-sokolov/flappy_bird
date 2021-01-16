@@ -186,22 +186,22 @@ const gameOverAnimation = (callback) => {
 
 // Функция для чтения текущей скорости, если игра проиграна, то возвращаем 0
 const getSpeed = () => {
-  return game.isGameOver ? 0 : SPEED;
+  return game.isGameOver ? 0 : SPEED
 }
 
 // Функция для поворота картинки
 const rotatedDrawImage = (image, fromX, fromY, angle) => {
-  ctx.save();
-  ctx.translate(fromX + image.width / 2, fromY + image.height / 2);
-  ctx.rotate(angle);
-  ctx.translate(-(fromX + image.width / 2), -(fromY + image.height / 2));
+  ctx.save()
+  ctx.translate(fromX + image.width / 2, fromY + image.height / 2)
+  ctx.rotate(angle)
+  ctx.translate(-(fromX + image.width / 2), -(fromY + image.height / 2))
   ctx.drawImage(image, fromX, fromY)
   ctx.restore()
 }
 
 // Функция для отрисовки птички
 const drawBird = () => {
-  const {status} = game;
+  const {status} = game
   const {bird} = images
 
   if (status !== GameStatus.pending) {
@@ -414,7 +414,7 @@ images.pipeTop.onload = () => {
 
 // Функция для прослушки нажатия клавиш
 const keydownListener = (event) => {
-  const { status, isGameOver, birdYPos } = game;
+  const { status, isGameOver, birdYPos } = game
 
   if (!isGameOver) {
     if (event.keyCode === JUMP_EVENT_KEY && status !== GameStatus.paused) {

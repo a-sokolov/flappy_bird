@@ -27,6 +27,16 @@ export const GAME_SPEED = 2
 export const GAME_GRAVITY = 0.35
 // Высота прыжка
 export const BIRD_JUMP_POINTS = 6
+// Коэффициент поворота картинки
+export const ROTATE_IMAGE_RATIO = 0.09
+// Угол, при котором птичка смотрит вниз
+export const MAX_ANGLE = 1.5
+// Позиция отрисовки следующей трубы
+export const NEXT_PIPE_POINT = 96
+// Расстояние между верхней и нижней трубой
+export const PIPE_SPACE_BETWEEN = 110
+// Минимальное высота верхней трубы
+export const TOP_PIPE_MINIMUM_HEIGHT = 30
 
 export const IMAGES = {
   [ImageType.backgroundDay]: './assets/img/background-day.png',

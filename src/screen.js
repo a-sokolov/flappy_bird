@@ -1,5 +1,5 @@
 import { ImageLoader } from './loaders/image-loader'
-import { GAME_DEFINITION } from './constants';
+import { GAME_DEFINITION } from './constants'
 
 export class Screen {
   constructor(width, height) {
@@ -75,8 +75,22 @@ export class Screen {
 
   drawSprite(sprite) {
     const image = this.images[sprite.imageName]
-    this.context.drawImage(image,
-      sprite.sourceX, sprite.sourceY, sprite.width, sprite.height,
-      sprite.x, sprite.y, sprite.width, sprite.height);
+
+    if (sprite.angle === 0) {
+      this.context.drawImage(image,
+        sprite.sourceX, sprite.sourceY, sprite.width, sprite.height,
+        sprite.x, sprite.y, sprite.width, sprite.height)
+    } else {
+      this.context.save()
+      this.context.translate(sprite.x + sprite.width / 2, sprite.y + sprite.height / 2)
+      this.context.rotate(sprite.angle)
+      this.context.translate(-(sprite.x + sprite.width / 2), -(sprite.y + sprite.height / 2))
+
+      this.context.drawImage(image,
+        sprite.sourceX, sprite.sourceY, sprite.width, sprite.height,
+        sprite.x, sprite.y, sprite.width, sprite.height)
+
+      this.context.restore()
+    }
   }
 }

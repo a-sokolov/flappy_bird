@@ -1,4 +1,6 @@
-import { ImageType, HotKeys } from '../../interfaces';
+import { Controller } from '../../controller'
+
+import { ImageType, HotKeys } from '../../interfaces'
 import {
   BIRD_FLAP_TIME,
   BIRD_X_POSITION,
@@ -7,27 +9,33 @@ import {
   TILES,
   GAME_GRAVITY,
   BIRD_JUMP_POINTS,
-  FLOOR_Y_POSITION
+  FLOOR_Y_POSITION,
+  ROTATE_IMAGE_RATIO,
+  MAX_ANGLE
 } from '../../constants'
 
 import { SpriteSheet } from '../../sprite-sheet'
 
-export class BirdController {
+export class BirdController extends Controller {
   constructor(game) {
+    super(game)
     this.game = game
     this.baseLine = game.screen.height / 2
     this.birdTiles = new SpriteSheet(TILES[ImageType.bird])
     this.spriteHeight = TILES[ImageType.bird].spriteHeight
+    this.spriteWidth = TILES[ImageType.bird].spriteWidth
 
     this.jump = this.jump.bind(this)
   }
 
   init() {
+    super.init()
     this.birdMovement = 0
     this.pendingStep = 0
     this.pendingStepIndex = BIRD_PENDING_STEP
     this.x = BIRD_X_POSITION
     this.y = this.baseLine
+    this.angle = 0
     this.isPending = true
 
     // Randomize bird color
@@ -45,6 +53,7 @@ export class BirdController {
   }
 
   destroy() {
+    super.destroy()
     this.game.control.removeListener(HotKeys.JUMP, this.jump)
   }
 
@@ -82,7 +91,22 @@ export class BirdController {
     }
   }
 
+  calcAngle() {
+    if (this.y === FLOOR_Y_POSITION - this.spriteHeight) {
+      return this.angle
+    }
+
+    let angle
+    angle = this.birdMovement * ROTATE_IMAGE_RATIO
+    angle = angle > MAX_ANGLE ? MAX_ANGLE : angle
+    this.angle = angle
+
+    return angle
+  }
+
   render(time) {
+    super.render(time)
+
     this.bird.update(time)
     if (this.isPending) {
       this.pending()
@@ -91,6 +115,7 @@ export class BirdController {
     }
 
     this.bird.setXY(this.x, this.y)
+    this.bird.setAngle(this.calcAngle())
     this.game.screen.drawSprite(this.bird)
   }
 }

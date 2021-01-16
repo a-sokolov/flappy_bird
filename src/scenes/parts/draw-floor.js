@@ -20,7 +20,7 @@ export class DrawFloor extends ScenePart {
 
     const { screen } = this.scene.game
 
-    this.floorXPosition--
+    this.floorXPosition -= this.scene.game.getSpeed()
     screen.drawImage(ImageType.floor, this.floorXPosition, FLOOR_Y_POSITION)
     if (this.floorXPosition <= screen.width - screen.getImage(ImageType.floor).width) {
       this.floorXPosition = 0

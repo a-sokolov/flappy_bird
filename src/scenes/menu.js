@@ -2,6 +2,7 @@ import { Scene } from '../scene'
 
 import { DrawFloor } from './parts/draw-floor'
 import { DrawScore } from './parts/draw-score'
+import { DrawHighScore } from './parts/draw-high-score'
 
 import { HotKeys, ImageType } from '../interfaces'
 
@@ -17,6 +18,7 @@ export class Menu extends Scene {
 
     this.addScenePart(new DrawFloor(this))
     this.addScenePart(new DrawScore(this))
+    this.addScenePart(new DrawHighScore(this))
 
     this.game.control.addListener(HotKeys.JUMP, this.startGame)
   }
@@ -34,7 +36,6 @@ export class Menu extends Scene {
   render(time) {
     this.game.screen.drawImage(ImageType.backgroundDay)
     this.game.screen.drawImageByCenter(ImageType.menu)
-    this.game.screen.printByXCenter(`high score: ${this.game.highScore}`, this.game.screen.height - 80)
 
     super.render(time)
   }
