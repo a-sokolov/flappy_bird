@@ -7,6 +7,7 @@ export class ControlState {
     this.restart = false
     this.menu = false
     this.listeners = []
+    this.logging = false
 
     this.keyMap = new Map([
       [32, HotKeys.jump],
@@ -30,13 +31,13 @@ export class ControlState {
       this[key] = pressed
       pressed && this.notify(key)
 
-      console.log(this)
+      this.logging && console.log(this)
     }
   }
 
   mouseUpdate(event, pressed) {
     if (event.button === 0 && event.target.localName === 'canvas') {
-      console.log(event)
+      this.logging && console.log(event)
 
       const key = HotKeys.jump
       this[key] = pressed

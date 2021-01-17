@@ -16,8 +16,8 @@ export class Scene {
   static get LOADED() { return 'LOADED' }
   static get START_GAME() { return 'START_GAME' }
   static get GAME_OVER() { return 'GAME_OVER' }
-  static get FINISHED() { return 'FINISHED' }
   static get NEW_GAME() { return 'NEW_GAME' }
+  static get PENDING() { return 'PENDING' }
 
   /** Инициализация сцены */
   init(props) {
@@ -44,6 +44,22 @@ export class Scene {
   finish(status, props) {
     this.status = status
     this.props = props
+  }
+
+  working() {
+    this.status = Scene.WORKING
+  }
+
+  isWorking() {
+    return this.status === Scene.WORKING
+  }
+
+  pending() {
+    this.status = Scene.PENDING
+  }
+
+  isPending() {
+    return this.status === Scene.PENDING
   }
 
   /** Рендер */

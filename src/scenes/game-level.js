@@ -46,8 +46,8 @@ export class GameLevel extends Scene {
     this.previousHighScore = this.game.highScore
     // Флаг, что показываем новый рекорд
     this.showHighScore = false
-    // Флаг, что игра началась
-    this.isGameStarted = false
+    // Последнее время, когда поменяли фоновую картинку
+    this.changeBackgroundLastTime = 0
 
     this.drawScore.setScore(0)
     this.addScenePart(this.drawFloor)
@@ -57,6 +57,9 @@ export class GameLevel extends Scene {
     this.pipesController.init()
 
     this.game.control.addListener(HotKeys.restart, this.restart)
+
+    // По умолчанию игра ожидает действия игрока
+    this.pending()
   }
 
   destroy() {
@@ -66,11 +69,13 @@ export class GameLevel extends Scene {
     this.pipesController.destroy()
 
     this.game.control.removeListener(HotKeys.restart, this.restart)
-    this.game.intervals.removeInterval(CHANGE_BACKGROUND_IMAGE_TIMEOUT, this.changeBackgroundImage)
   }
 
   /** Перезапуск игры */
   restart() {
+    if (this.game.isPause) {
+      return
+    }
     this.finish(Scene.NEW_GAME)
   }
 
@@ -86,13 +91,24 @@ export class GameLevel extends Scene {
   }
 
   changeBackgroundImage() {
-    this.backgroundImage =
-      this.backgroundImage === ImageType.backgroundDay
+    const time = this.game.getTime()
+    if (this.isPending()
+        || time === 0
+        || this.changeBackgroundLastTime === time) {
+      return
+    }
+
+    if (this.game.getTime() % CHANGE_BACKGROUND_IMAGE_TIMEOUT === 0) {
+      this.backgroundImage =
+        this.backgroundImage === ImageType.backgroundDay
           ? ImageType.backgroundNight
           : ImageType.backgroundDay
+      this.changeBackgroundLastTime = time
+    }
   }
 
   render(time) {
+    this.changeBackgroundImage()
     this.game.screen.drawImage(this.backgroundImage)
     // Рисуем трубы
     this.pipesController.render(time)
@@ -101,10 +117,9 @@ export class GameLevel extends Scene {
 
     // Как только игрок стартовал игру, то передаем контроллеру "труб" начать анимацию
     this.pipesController.setPending(this.birdController.isPending)
-    if (!this.isGameStarted && !this.birdController.isPending) {
+    if (!this.isWorking() && !this.birdController.isPending) {
       this.game.events.fireEvent(EventType.gameStarted)
-      this.isGameStarted = true
-      this.game.intervals.addInterval(CHANGE_BACKGROUND_IMAGE_TIMEOUT, this.changeBackgroundImage, time)
+      this.working()
     }
 
     // Отображаем игровые очки

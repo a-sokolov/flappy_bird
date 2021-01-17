@@ -46,8 +46,8 @@ export const NEXT_PIPE_POINT = 96
 export const PIPE_SPACE_BETWEEN = 110
 // Минимальное высота верхней трубы
 export const TOP_PIPE_MINIMUM_HEIGHT = 30
-// Время, когда нужно менять задний фон
-export const CHANGE_BACKGROUND_IMAGE_TIMEOUT = 20000
+// Время в секундах, когда нужно менять задний фон
+export const CHANGE_BACKGROUND_IMAGE_TIMEOUT = 20
 
 // Изображения
 export const IMAGES = {

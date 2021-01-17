@@ -14,6 +14,12 @@ export class Audio {
     console.log(names)
   }
 
+  /** Метод для паузы аудио */
+  pause(name) {
+    const audio = this.audios[name]
+    return audio.pause()
+  }
+
   /** Проигрывание аудио по его имени с предварительной остановкой текущего */
   play(name, stop = true) {
     const audio = this.audios[name]

@@ -11,7 +11,7 @@ export class Intervals {
    * Добавление интервала.
    * @param timeout время, когда должен сработать интервал
    * @param callback колбэк, который нужно вызвать
-   * @param time время. от куда начинать отсчёт
+   * @param time время, от куда начинать отсчёт
    * */
   addInterval(timeout, callback, time = 0) {
     this.intervals.push({ timeout, callback, time })

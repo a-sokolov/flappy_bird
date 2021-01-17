@@ -6,7 +6,7 @@ import { ControlState } from './control-state'
 import { Events } from './events'
 
 import { IMAGES, AUDIOS, GAME_DEFINITION, GAME_SPEED } from './constants'
-import { HotKeys } from './interfaces'
+import { HotKeys, EventType } from './interfaces'
 
 import { Loading } from './scenes/loading'
 import { Menu } from './scenes/menu'
@@ -49,13 +49,35 @@ export class Game {
     this.isPause = false
     // Рекордные очки
     this.highScore = 0
+    // Игровой таймер
+    this.timer = {
+      id: 0,
+      time: 0
+    }
 
     this.pause = this.pause.bind(this)
     this.menu = this.menu.bind(this)
+    this.gameTimer = this.gameTimer.bind(this)
 
     // Подписываемся под нажатие горячих клавиш "Пауза" и "Меню"
     this.control.addListener(HotKeys.pause, this.pause)
     this.control.addListener(HotKeys.menu, this.menu)
+  }
+
+  /** Функция для отчета игрового времени */
+  gameTimer() {
+    if (this.currentScene instanceof GameLevel
+        && this.currentScene.isWorking()
+        && !this.isPause) {
+      this.timer.time++
+    }
+  }
+
+  runTimer() {
+    clearInterval(this.timer.id)
+    this.timer.time = 0
+
+    this.timer.id = setInterval(this.gameTimer, 1000)
   }
 
   /**
@@ -82,6 +104,11 @@ export class Game {
         scene = this.scenes.menu
     }
 
+    // Определяем когда запускать или останавливать игровой таймер
+    if ([Scene.START_GAME, Scene.NEW_GAME].includes(status)) {
+      this.runTimer()
+    }
+
     this.setScene(scene, props)
   }
 
@@ -100,6 +127,14 @@ export class Game {
   pause() {
     if (this.currentScene instanceof GameLevel) {
       this.isPause = !this.isPause
+
+      if (this.isPause) {
+        this.events.fireEvent(EventType.pause)
+        this.screen.printByCenter('Pause')
+      } else {
+        this.events.fireEvent(EventType.resume)
+      }
+
       this.isPause && this.stop()
       !this.isPause && this.run()
     }
@@ -107,14 +142,19 @@ export class Game {
 
   /** Выводим меню, только если текущая сцена "Игровой уровень" */
   menu() {
+    if (this.isPause) {
+      return
+    }
+
     if (this.currentScene instanceof GameLevel) {
+      this.events.fireEvent(EventType.gameEnded)
       this.setScene(this.scenes.menu)
     }
   }
 
   /** Основной цикл игры */
   frame(time) {
-    if (this.currentScene.status !== Scene.WORKING) {
+    if (!this.currentScene.isWorking() && !this.currentScene.isPending()) {
       // Если статус текущей сцены не "В работе", то переходим к следующей с передачей пропсов
       const { status, props } = this.currentScene
       this.changeScene(status, props)
@@ -134,6 +174,7 @@ export class Game {
   run(callbackAfterLoading) {
     this.animationId = requestAnimationFrame(time => this.frame(time))
     this.callbackAfterLoading = callbackAfterLoading
+    this.runTimer()
   }
 
   /** Метод для остановки анимации */
@@ -145,6 +186,11 @@ export class Game {
   /** Метод для чтения игровой скорости */
   getSpeed() {
     return GAME_SPEED
+  }
+
+  /** Метод для чтения текущего игрового времени */
+  getTime() {
+    return this.timer.time
   }
 
   /**

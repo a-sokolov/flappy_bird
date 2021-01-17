@@ -84,6 +84,10 @@ export class BirdController extends Controller {
 
   /** Прыжок птички */
   jump() {
+    if (this.game.isPause) {
+      return
+    }
+    
     if (this.isPending) {
       this.isPending = false
     }

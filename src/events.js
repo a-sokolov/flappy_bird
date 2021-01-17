@@ -31,6 +31,12 @@ export class Events {
       case EventType.gameEnded:
         this.game.audio.stop(AudioType.background)
         return
+      case EventType.pause:
+        this.game.audio.pause(AudioType.background)
+        return
+      case EventType.resume:
+        this.game.audio.play(AudioType.background, false)
+        return
       default:
         return
     }

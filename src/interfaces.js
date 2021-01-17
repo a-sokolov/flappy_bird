@@ -37,7 +37,9 @@ const __EventType = {
   score: 'score',
   highScore: 'highScore',
   gameStarted: 'gameStarted',
-  gameEnded: 'gameEnded'
+  gameEnded: 'gameEnded',
+  pause: 'pause',
+  resume: 'resume'
 }
 
 export const HotKeys = Object.freeze(__HotKeys)
