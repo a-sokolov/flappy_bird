@@ -18,10 +18,21 @@ export class Audio {
   play(name, stop = true) {
     const audio = this.audios[name]
 
-    if (stop) {
-      audio.pause()
-      audio.currentTime = 0
-    }
+    stop && this.stop(name)
+    return audio.play()
+  }
+
+  /** Метод для остановки проигрывания аудио */
+  stop(name) {
+    const audio = this.audios[name]
+    audio.pause()
+    audio.currentTime = 0
+  }
+
+  /** Метод для зацикливания аудио */
+  loop(name) {
+    const audio = this.audios[name]
+    audio.loop = true
     return audio.play()
   }
 }

@@ -102,6 +102,7 @@ export class GameLevel extends Scene {
     // Как только игрок стартовал игру, то передаем контроллеру "труб" начать анимацию
     this.pipesController.setPending(this.birdController.isPending)
     if (!this.isGameStarted && !this.birdController.isPending) {
+      this.game.events.fireEvent(EventType.gameStarted)
       this.isGameStarted = true
       this.game.intervals.addInterval(CHANGE_BACKGROUND_IMAGE_TIMEOUT, this.changeBackgroundImage, time)
     }
@@ -129,6 +130,7 @@ export class GameLevel extends Scene {
     if (this.collisionsInspector.isCollision()) {
       // Проверяем коллизию и если есть "столкновение", то переходим на сцену "Конец игры"
       this.game.events.fireEvent(EventType.fail)
+      this.game.events.fireEvent(EventType.gameEnded)
       this.gameOver()
     }
 

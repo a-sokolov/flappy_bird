@@ -13,7 +13,8 @@ const __AudioType = {
   gameOver: 'gameOver',
   jump: 'jump',
   score: 'score',
-  highScore: 'highScore'
+  highScore: 'highScore',
+  background: 'background'
 }
 
 // Картинки
@@ -34,7 +35,9 @@ const __EventType = {
   jump: 'jump',
   fail: 'fail',
   score: 'score',
-  highScore: 'highScore'
+  highScore: 'highScore',
+  gameStarted: 'gameStarted',
+  gameEnded: 'gameEnded'
 }
 
 export const HotKeys = Object.freeze(__HotKeys)

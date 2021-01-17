@@ -79,5 +79,6 @@ export const AUDIOS = {
   [AudioType.gameOver]: './assets/audio/game-over.mp3',
   [AudioType.jump]: './assets/audio/jump.mp3',
   [AudioType.score]: './assets/audio/score.mp3',
-  [AudioType.highScore]: './assets/audio/high-score.mp3'
+  [AudioType.highScore]: './assets/audio/high-score.mp3',
+  [AudioType.background]: './assets/audio/background.mp3'
 }

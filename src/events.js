@@ -25,6 +25,12 @@ export class Events {
       case EventType.fail:
         audioName = AudioType.fail
         break
+      case EventType.gameStarted:
+        this.game.audio.loop(AudioType.background)
+        return
+      case EventType.gameEnded:
+        this.game.audio.stop(AudioType.background)
+        return
       default:
         return
     }
