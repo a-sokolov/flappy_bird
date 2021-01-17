@@ -1,12 +1,13 @@
 import { FLOOR_Y_POSITION } from '../constants'
 
+/** Класс для подсчета игровых коллизий */
 export class CollisionsInspector {
-  constructor(game, birdController, pipesController) {
-    this.game = game
+  constructor(birdController, pipesController) {
     this.birdController = birdController
     this.pipesController = pipesController
   }
 
+  /** Метод для проверки коллизий двух прямоугольников */
   checkRectCollision(rect1, rect2) {
     return (rect1.x < rect2.x + rect2.width &&
       rect1.x + rect1.width > rect2.x &&
@@ -14,6 +15,7 @@ export class CollisionsInspector {
       rect1.y + rect1.height > rect2.y)
   }
 
+  /** Метод проверки игровых коллизий (когда птичка сталкивается с трубой) */
   isCollision() {
     const { pipes } = this.pipesController
     const { x, y, spriteWidth, spriteHeight } = this.birdController

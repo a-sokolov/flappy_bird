@@ -1,11 +1,17 @@
+/** Базовый класс сцены */
 export class Scene {
   constructor(game) {
+    // Игровой класс
     this.game = game
+    // Текущий статус
     this.status = this.constructor.WORKING
+    // Пропсы
     this.props = null
+    // Зарегистрированные "куски" анимации
     this.sceneParts = []
   }
 
+  // Статусы
   static get WORKING() { return 'WORKING' }
   static get LOADED() { return 'LOADED' }
   static get START_GAME() { return 'START_GAME' }
@@ -13,28 +19,34 @@ export class Scene {
   static get FINISHED() { return 'FINISHED' }
   static get NEW_GAME() { return 'NEW_GAME' }
 
+  /** Инициализация сцены */
   init(props) {
     this.status = this.constructor.WORKING
   }
 
+  /** Метод добавления "куска" анимации */
   addScenePart(part) {
     part.init()
     this.sceneParts.push(part)
   }
 
+  /** Метод для удаления "куска" анимации */
   removeScenePart(part) {
     this.sceneParts = this.sceneParts.filter(item => item !== part)
   }
 
+  /** Метод удаления сцены */
   destroy() {
     this.sceneParts = []
   }
 
+  /** Смена статуса сцены */
   finish(status, props) {
     this.status = status
     this.props = props
   }
 
+  /** Рендер */
   render(time) {
     this.sceneParts.forEach(part => part.render(time))
   }

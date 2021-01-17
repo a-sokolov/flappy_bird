@@ -1,5 +1,6 @@
+/** Спрайт */
 export class Sprite {
-  constructor({ imageName, sourceX, sourceY, width = 64, height = 64 }) {
+  constructor({ imageName, sourceX, sourceY, width, height }) {
     this.imageName = imageName
     this.sourceX = sourceX
     this.sourceY = sourceY
@@ -10,11 +11,13 @@ export class Sprite {
     this.angle = 0
   }
 
+  /** Метод установки x и y координат */
   setXY(x, y) {
     this.x = x
     this.y = y
   }
 
+  /** Метод установки угла, на сколько нужно повернуть анимацию */
   setAngle(angle) {
     this.angle = angle
   }

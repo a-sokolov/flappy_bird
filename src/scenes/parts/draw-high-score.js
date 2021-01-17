@@ -1,14 +1,15 @@
 import { ScenePart } from '../../scene-part'
 
+/** Анимация отображения рекордных очков */
 export class DrawHighScore extends ScenePart {
-  constructor(scene) {
-    super(scene)
+  constructor(game) {
+    super(game)
   }
 
   render(time) {
     super.render(time)
 
-    const { game } = this.scene
-    game.screen.printByXCenter(`high score: ${game.highScore}`, game.screen.height - 80)
+    const { screen, highScore } = this.game
+    screen.printByXCenter(`high score: ${highScore}`, screen.height - 80)
   }
 }

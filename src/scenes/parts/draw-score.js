@@ -1,8 +1,14 @@
 import { ScenePart } from '../../scene-part'
 
+/** Анимация отображения текущих очков игрока */
 export class DrawScore extends ScenePart {
-  constructor(scene) {
-    super(scene)
+  constructor(game) {
+    super(game)
+  }
+
+  init() {
+    super.init()
+
     this.score = 0
   }
 
@@ -13,6 +19,6 @@ export class DrawScore extends ScenePart {
   render(time) {
     super.render(time)
 
-    this.scene.game.screen.printByXCenter(`score: ${this.score}`,  70)
+    this.game.screen.printByXCenter(`score: ${this.score}`,  70)
   }
 }

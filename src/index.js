@@ -4,9 +4,12 @@ import { Game } from './game'
 import './styles/styles.css'
 
 window.onload = () => {
+  // Загрузка шрифта
   const font = new FontFaceObserver('04b19')
   font.load().then(() => {
+    // Создаем игру
     const flappyBird = new Game()
+    // Запускаем игру, которая вызывает колбэк, когда она будет загружена
     flappyBird.run(() => {
       // Отображаем блок управления игрой и версию приложения
       const version = document.getElementById('version')

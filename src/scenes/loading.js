@@ -1,12 +1,10 @@
 import { Scene } from '../scene'
 import { SHOW_LOADING_TIMEOUT, LOADING_DOT_COUNT, LOADING_PROGRESS_TIMEOUT } from '../constants'
 
+/** Сцена загрузки ресурсов игры */
 export class Loading extends Scene {
   constructor(game) {
     super(game)
-
-    this.loadedAt = 0
-    this.progress = 0
 
     this.showProgress = this.showProgress.bind(this)
   }
@@ -25,6 +23,7 @@ export class Loading extends Scene {
     this.game.intervals.removeInterval(SHOW_LOADING_TIMEOUT, this.showProgress)
   }
 
+  /** Метод для чтения следующей "точки", чтобы показать анимацию загрузки */
   showProgress() {
     this.progress++
     if (this.progress > LOADING_DOT_COUNT) {
@@ -38,6 +37,7 @@ export class Loading extends Scene {
     }
 
     if (this.loadedAt !== 0 && (time - this.loadedAt) >= LOADING_PROGRESS_TIMEOUT) {
+      // Как только достигнуто минимальное время загрузки, переходим на следующую сцену
       this.finish(Scene.LOADED)
     }
   }

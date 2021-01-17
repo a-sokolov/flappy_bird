@@ -1,5 +1,6 @@
 import { EventType, AudioType } from './interfaces'
 
+/** Класс основных событий игры */
 export class Events {
   constructor(game) {
     this.game = game

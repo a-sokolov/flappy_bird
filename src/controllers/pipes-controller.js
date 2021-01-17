@@ -3,6 +3,7 @@ import { Controller } from '../controller'
 import { PIPE_SPACE_BETWEEN, TOP_PIPE_MINIMUM_HEIGHT, NEXT_PIPE_POINT } from '../constants'
 import { ImageType } from '../interfaces'
 
+/** Контроллер создания и движения труб */
 export class PipesController extends Controller {
   constructor(game) {
     super(game)
@@ -12,6 +13,7 @@ export class PipesController extends Controller {
     super.init()
 
     this.pipes = []
+    // При инициализации создаем 1ую трубу, т.к. от её координат будем создавать следующие
     this.pipes.push(this.createPipe())
     this.isPending = true
   }
@@ -22,10 +24,13 @@ export class PipesController extends Controller {
     this.pipes = []
   }
 
+  /** Метод для создания трубы */
   createPipe() {
+    // Инициализируем размеры изображений
     const pipeTopImage = this.game.screen.getImage(ImageType.pipeTop)
     const pipeBottomImage = this.game.screen.getImage(ImageType.pipeBottom)
 
+    // Определяем координаты верхней трубы (рандом)
     const top = {
       x: this.game.screen.width,
       // Y позиция вычисляется случайным образом
@@ -41,6 +46,7 @@ export class PipesController extends Controller {
       top.y += TOP_PIPE_MINIMUM_HEIGHT - delta
     }
 
+    // Определяем координаты нижней трубы, относительно верхней, добавляя константу расстояния между ними
     const bottom = {
       x: this.game.screen.width,
       y: top.y + pipeTopImage.height + PIPE_SPACE_BETWEEN,
@@ -56,7 +62,7 @@ export class PipesController extends Controller {
   }
 
   update() {
-    this.pipes.forEach((pipe) => {
+    this.pipes.forEach(pipe => {
       const { top, bottom } = pipe
 
       this.game.screen.drawImage(ImageType.pipeTop, top.x, top.y)
@@ -70,12 +76,21 @@ export class PipesController extends Controller {
         this.pipes.push(this.createPipe())
       }
     })
+
+    if (this.pipes[0]) {
+      const { top, bottom } = this.pipes[0]
+      if (top.x + top.width < 0 || bottom.x + bottom.width < 0) {
+        // Как только пара труб ушла за границу экрана, то удаляем её из массива, т.к. она больше не нужна
+        this.pipes.shift()
+      }
+    }
   }
 
   render(time) {
     super.render(time)
 
     if (!this.isPending) {
+      // Запускаем анимацию, когда режим "ожидания" закончен
       this.update()
     }
   }

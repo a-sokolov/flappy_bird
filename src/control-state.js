@@ -5,13 +5,14 @@ export class ControlState {
     this.jump = false
     this.pause = false
     this.restart = false
+    this.menu = false
     this.listeners = []
 
     this.keyMap = new Map([
-      [32, HotKeys.JUMP],
-      [80, HotKeys.PAUSE],
-      [78, HotKeys.RESTART],
-      [77, HotKeys.MENU]
+      [32, HotKeys.jump],
+      [80, HotKeys.pause],
+      [78, HotKeys.restart],
+      [77, HotKeys.menu]
     ])
 
     document.addEventListener('keydown', event => this.update(event, true))
@@ -26,7 +27,7 @@ export class ControlState {
       event.stopPropagation()
 
       const key = this.keyMap.get(event.keyCode)
-      this[key.toLowerCase()] = pressed
+      this[key] = pressed
       pressed && this.notify(key)
 
       console.log(this)
@@ -37,8 +38,8 @@ export class ControlState {
     if (event.button === 0 && event.target.localName === 'canvas') {
       console.log(event)
 
-      const key = HotKeys.JUMP
-      this[key.toLowerCase()] = pressed
+      const key = HotKeys.jump
+      this[key] = pressed
       pressed && this.notify(key)
     }
   }

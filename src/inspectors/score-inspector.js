@@ -1,6 +1,6 @@
+/** Класс для подсчета кол-ва игровых очков */
 export class ScoreInspector {
-  constructor(game, birdController, pipesController) {
-    this.game = game
+  constructor(birdController, pipesController) {
     this.birdController = birdController
     this.pipesController = pipesController
   }
@@ -17,8 +17,6 @@ export class ScoreInspector {
         newScore++
       }
     })
-
-    this.game.setHighScore(newScore)
 
     return newScore
   }

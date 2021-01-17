@@ -1,3 +1,4 @@
+/** Класс-загрузчик аудио файлов */
 export class AudioLoader {
   constructor(audioFiles) {
     this.audioFiles = audioFiles

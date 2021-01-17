@@ -1,3 +1,4 @@
+/** Класс-загрузчик изображений */
 export class ImageLoader {
   constructor(imageFiles) {
     this.imageFiles = imageFiles

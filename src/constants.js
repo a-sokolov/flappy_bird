@@ -1,10 +1,15 @@
 import { ImageType, AudioType } from './interfaces'
 
+// Игровые параметры
 export const GAME_DEFINITION = {
+  // Ширина экрана
   width: 288,
+  // Высота экрана
   height: 512,
   font: {
+    // Размер шрифта
     size: '22px',
+    // Шрифт
     name: '04b19'
   }
 }
@@ -17,9 +22,13 @@ export const SHOW_LOADING_TIMEOUT = 200
 export const LOADING_PROGRESS_TIMEOUT = 700
 // Позиция пола
 export const FLOOR_Y_POSITION = GAME_DEFINITION.height - 65
+// Позиция птички по x координате
 export const BIRD_X_POSITION = 30
+// Время, когда нужно обновлять анимацию движения крыльев
 export const BIRD_FLAP_TIME = 200
+// Кол-во точек движения, при старте новой игры и ожидания от игрока нажатия прыжка
 export const BIRD_PENDING_Y_GAP = 7
+// Кол-во точек, на которое нужно увеличить шаг анимации ожидания
 export const BIRD_PENDING_STEP = 0.5
 // Скорость игры
 export const GAME_SPEED = 2
@@ -38,6 +47,7 @@ export const PIPE_SPACE_BETWEEN = 110
 // Минимальное высота верхней трубы
 export const TOP_PIPE_MINIMUM_HEIGHT = 30
 
+// Изображения
 export const IMAGES = {
   [ImageType.backgroundDay]: './assets/img/background-day.png',
   [ImageType.backgroundNight]: './assets/img/background-night.png',
@@ -49,6 +59,7 @@ export const IMAGES = {
   [ImageType.bird]: './assets/img/bird.png'
 }
 
+// Тайловые карты
 export const TILES = {
   [ImageType.bird]: {
     imageName: ImageType.bird,
@@ -59,6 +70,7 @@ export const TILES = {
   }
 }
 
+// Аудио
 export const AUDIOS = {
   [AudioType.fail]: './assets/audio/fail.mp3',
   [AudioType.flap]: './assets/audio/flap.mp3',

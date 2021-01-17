@@ -1,10 +1,12 @@
+// Горячие клавиши
 const __HotKeys = {
-  JUMP: 'JUMP',
-  PAUSE: 'PAUSE',
-  RESTART: 'RESTART',
-  MENU: 'MENU'
+  jump: 'jump',
+  pause: 'pause',
+  restart: 'restart',
+  menu: 'menu'
 }
 
+// Аудио
 const __AudioType = {
   fail: 'fail',
   flap: 'flap',
@@ -14,6 +16,7 @@ const __AudioType = {
   highScore: 'highScore'
 }
 
+// Картинки
 const __ImageType = {
   backgroundDay: 'backgroundDay',
   backgroundNight: 'backgroundNight',
@@ -25,6 +28,7 @@ const __ImageType = {
   bird: 'bird'
 }
 
+// События
 const __EventType = {
   gameOver: 'gameOver',
   jump: 'jump',

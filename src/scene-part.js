@@ -1,6 +1,7 @@
+/** Класс "куска" сцены */
 export class ScenePart {
-  constructor(scene) {
-    this.scene = scene
+  constructor(game) {
+    this.game = game
   }
 
   init() {
