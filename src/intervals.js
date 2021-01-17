@@ -16,7 +16,7 @@ export class Intervals {
   checkIntervals(time) {
     this.intervals.forEach(interval => {
       if (time - interval.time >= interval.timeout) {
-        interval.callback && interval.callback()
+        interval.callback?.()
         interval.time = time
       }
     })

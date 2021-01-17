@@ -1,7 +1,7 @@
-import { Controller } from '../../controller'
+import { Controller } from '../controller'
 
-import { PIPE_SPACE_BETWEEN, TOP_PIPE_MINIMUM_HEIGHT, NEXT_PIPE_POINT } from '../../constants'
-import { ImageType } from '../../interfaces'
+import { PIPE_SPACE_BETWEEN, TOP_PIPE_MINIMUM_HEIGHT, NEXT_PIPE_POINT } from '../constants'
+import { ImageType } from '../interfaces'
 
 export class PipesController extends Controller {
   constructor(game) {

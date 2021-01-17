@@ -1,6 +1,6 @@
-import { Controller } from '../../controller'
+import { Controller } from '../controller'
 
-import { ImageType, HotKeys } from '../../interfaces'
+import { ImageType, HotKeys, EventType } from '../interfaces'
 import {
   BIRD_FLAP_TIME,
   BIRD_X_POSITION,
@@ -12,9 +12,9 @@ import {
   FLOOR_Y_POSITION,
   ROTATE_IMAGE_RATIO,
   MAX_ANGLE
-} from '../../constants'
+} from '../constants'
 
-import { SpriteSheet } from '../../sprite-sheet'
+import { SpriteSheet } from '../sprite-sheet'
 
 export class BirdController extends Controller {
   constructor(game) {
@@ -72,6 +72,8 @@ export class BirdController extends Controller {
     if (this.isPending) {
       this.isPending = false
     }
+
+    this.game.events.fireEvent(EventType.jump)
 
     if (this.y + BIRD_JUMP_POINTS + GAME_GRAVITY > 0) {
       // Если Y позиция птички + прыжок + гравитация > 0, то добавляем к позиции прыжок.

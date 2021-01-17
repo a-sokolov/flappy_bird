@@ -1,4 +1,4 @@
-import { FLOOR_Y_POSITION } from '../../constants'
+import { FLOOR_Y_POSITION } from '../constants'
 
 export class CollisionsInspector {
   constructor(game, birdController, pipesController) {

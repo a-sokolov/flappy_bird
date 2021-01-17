@@ -11,8 +11,8 @@ export class Loading extends Scene {
     this.showProgress = this.showProgress.bind(this)
   }
 
-  init() {
-    super.init()
+  init(props) {
+    super.init(props)
 
     this.loadedAt = 0
     this.progress = 0

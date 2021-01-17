@@ -13,8 +13,8 @@ export class Menu extends Scene {
     this.startGame = this.startGame.bind(this)
   }
 
-  init() {
-    super.init()
+  init(props) {
+    super.init(props)
 
     this.addScenePart(new DrawFloor(this))
     this.addScenePart(new DrawScore(this))

@@ -6,13 +6,22 @@ export class DrawFloor extends ScenePart {
   constructor(scene) {
     super(scene)
 
-    this.floorXPosition = 0
+    this.speed = this.scene.game.getSpeed()
   }
 
   init() {
     super.init()
 
-    this.floorXPosition = 0
+    this.x = 0
+
+  }
+
+  setX(x) {
+    this.x = x
+  }
+
+  setSpeed(speed) {
+    this.speed = speed
   }
 
   render(time) {
@@ -20,10 +29,10 @@ export class DrawFloor extends ScenePart {
 
     const { screen } = this.scene.game
 
-    this.floorXPosition -= this.scene.game.getSpeed()
-    screen.drawImage(ImageType.floor, this.floorXPosition, FLOOR_Y_POSITION)
-    if (this.floorXPosition <= screen.width - screen.getImage(ImageType.floor).width) {
-      this.floorXPosition = 0
+    this.x -= this.speed
+    screen.drawImage(ImageType.floor, this.x, FLOOR_Y_POSITION)
+    if (this.x <= screen.width - screen.getImage(ImageType.floor).width) {
+      this.x = 0
     }
   }
 }

@@ -10,7 +10,8 @@ const __AudioType = {
   flap: 'flap',
   gameOver: 'gameOver',
   jump: 'jump',
-  score: 'score'
+  score: 'score',
+  highScore: 'highScore'
 }
 
 const __ImageType = {
@@ -24,6 +25,15 @@ const __ImageType = {
   bird: 'bird'
 }
 
+const __EventType = {
+  gameOver: 'gameOver',
+  jump: 'jump',
+  fail: 'fail',
+  score: 'score',
+  highScore: 'highScore'
+}
+
 export const HotKeys = Object.freeze(__HotKeys)
 export const AudioType = Object.freeze(__AudioType)
 export const ImageType = Object.freeze(__ImageType)
+export const EventType = Object.freeze(__EventType)

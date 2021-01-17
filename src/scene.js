@@ -2,6 +2,7 @@ export class Scene {
   constructor(game) {
     this.game = game
     this.status = this.constructor.WORKING
+    this.props = null
     this.sceneParts = []
   }
 
@@ -12,7 +13,7 @@ export class Scene {
   static get FINISHED() { return 'FINISHED' }
   static get NEW_GAME() { return 'NEW_GAME' }
 
-  init() {
+  init(props) {
     this.status = this.constructor.WORKING
   }
 
@@ -29,8 +30,9 @@ export class Scene {
     this.sceneParts = []
   }
 
-  finish(status) {
+  finish(status, props) {
     this.status = status
+    this.props = props
   }
 
   render(time) {

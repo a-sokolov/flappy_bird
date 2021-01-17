@@ -3,6 +3,7 @@ import { Audio } from './audio'
 import { Scene } from './scene'
 import { Intervals } from './intervals'
 import { ControlState } from './control-state'
+import { Events } from './events'
 
 import { IMAGES, AUDIOS, GAME_DEFINITION, GAME_SPEED } from './constants'
 import { HotKeys } from './interfaces'
@@ -10,6 +11,7 @@ import { HotKeys } from './interfaces'
 import { Loading } from './scenes/loading'
 import { Menu } from './scenes/menu'
 import { GameLevel } from './scenes/game-level'
+import { GameOver } from './scenes/game-over'
 
 export class Game {
   constructor(props = {}) {
@@ -20,11 +22,15 @@ export class Game {
     this.screen.loadImages(IMAGES)
     this.audio = new Audio()
     this.audio.loadAudio(AUDIOS)
+
     this.control = new ControlState()
+    this.events = new Events(this)
+
     this.scenes = {
       loading: new Loading(this),
       menu: new Menu(this),
-      gameLevel: new GameLevel(this)
+      gameLevel: new GameLevel(this),
+      gameOver: new GameOver(this)
     }
     this.currentScene = this.scenes.loading
     this.currentScene.init()
@@ -40,7 +46,7 @@ export class Game {
     this.control.addListener(HotKeys.MENU, this.menu)
   }
 
-  changeScene(status) {
+  changeScene(status, props) {
     let scene
     switch (status) {
       case Scene.LOADED:
@@ -51,17 +57,20 @@ export class Game {
       case Scene.NEW_GAME:
         scene = this.scenes.gameLevel
         break
+      case Scene.GAME_OVER:
+        scene = this.scenes.gameOver
+        break
       default:
         scene = this.scenes.menu
     }
 
-    this.setScene(scene)
+    this.setScene(scene, props)
   }
 
-  setScene(scene) {
+  setScene(scene, props) {
     this.currentScene.destroy()
     this.currentScene = scene
-    this.currentScene.init()
+    this.currentScene.init(props)
   }
 
   pause() {
@@ -80,7 +89,7 @@ export class Game {
 
   frame(time) {
     if (this.currentScene.status !== Scene.WORKING) {
-      this.changeScene(this.currentScene.status)
+      this.changeScene(this.currentScene.status, this.currentScene.props)
     }
 
     this.currentScene.render(time)

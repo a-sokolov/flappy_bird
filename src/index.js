@@ -16,7 +16,7 @@ window.onload = () => {
       help.innerHTML = `<p>m - menu</p>
         <p>p - pause</p>
         <p>n - new game</p>
-        <p>space/mouse click - jump</p>`
+        <p>space/mouse click - flap</p>`
     })
   })
 }

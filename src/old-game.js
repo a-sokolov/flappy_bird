@@ -175,7 +175,7 @@ const gameOverAnimation = (callback) => {
     // Как только птичка коснулась пола, то вызываем колбэк
     game.birdYPos = FLOOR_Y_POSITION - bird.height
     ctx.drawImage(bird, BIRD_X_POSITION, game.birdYPos)
-    callback && callback()
+    callback?.()
   } else {
     // Если еще не коснулись пола, то отрисовываем анимацию птицы.
     // А т.к. движение игры остановлено, птица под силой гравитации будет падать вниз, в точке,
@@ -289,7 +289,7 @@ const drawPipes = (pipes, callback) => {
       pipes.push(createPipe())
     }
 
-    callback && callback(pipe)
+    callback?.(pipe)
   })
 }
 
