@@ -11,6 +11,7 @@ import { ScoreInspector } from '../inspectors/score-inspector'
 import { CollisionsInspector } from '../inspectors/collisions-inspector'
 
 import { HotKeys, ImageType, EventType } from '../interfaces'
+import { CHANGE_BACKGROUND_IMAGE_TIMEOUT } from '../constants'
 
 /** Игровая сцена */
 export class GameLevel extends Scene {
@@ -18,6 +19,7 @@ export class GameLevel extends Scene {
     super(game)
 
     this.restart = this.restart.bind(this)
+    this.changeBackgroundImage = this.changeBackgroundImage.bind(this)
 
     // Создаем контроллеры управления птичкой и трубами
     this.birdController = new BirdController(game)
@@ -36,12 +38,16 @@ export class GameLevel extends Scene {
   init(props) {
     super.init(props)
 
+    // Фон
+    this.backgroundImage = ImageType.backgroundDay
     // Флаг, что звук рекорда был проигран
     this.highScoreSoundPlayed = false
     // Предыдущее значение рекорда
     this.previousHighScore = this.game.highScore
     // Флаг, что показываем новый рекорд
     this.showHighScore = false
+    // Флаг, что игра началась
+    this.isGameStarted = false
 
     this.drawScore.setScore(0)
     this.addScenePart(this.drawFloor)
@@ -49,6 +55,7 @@ export class GameLevel extends Scene {
 
     this.birdController.init()
     this.pipesController.init()
+
     this.game.control.addListener(HotKeys.restart, this.restart)
   }
 
@@ -57,7 +64,9 @@ export class GameLevel extends Scene {
 
     this.birdController.destroy()
     this.pipesController.destroy()
+
     this.game.control.removeListener(HotKeys.restart, this.restart)
+    this.game.intervals.removeInterval(CHANGE_BACKGROUND_IMAGE_TIMEOUT, this.changeBackgroundImage)
   }
 
   /** Перезапуск игры */
@@ -71,18 +80,31 @@ export class GameLevel extends Scene {
       score: this.drawScore.score,
       birdController: this.birdController,
       pipes: [...this.pipesController.pipes],
-      floorXPosition: this.drawFloor.x
+      floorXPosition: this.drawFloor.x,
+      backgroundImage: this.backgroundImage
     })
   }
 
+  changeBackgroundImage() {
+    this.backgroundImage =
+      this.backgroundImage === ImageType.backgroundDay
+          ? ImageType.backgroundNight
+          : ImageType.backgroundDay
+  }
+
   render(time) {
-    this.game.screen.drawImage(ImageType.backgroundDay)
+    this.game.screen.drawImage(this.backgroundImage)
     // Рисуем трубы
     this.pipesController.render(time)
     // Рисуем птичку
     this.birdController.render(time)
+
     // Как только игрок стартовал игру, то передаем контроллеру "труб" начать анимацию
     this.pipesController.setPending(this.birdController.isPending)
+    if (!this.isGameStarted && !this.birdController.isPending) {
+      this.isGameStarted = true
+      this.game.intervals.addInterval(CHANGE_BACKGROUND_IMAGE_TIMEOUT, this.changeBackgroundImage, time)
+    }
 
     // Отображаем игровые очки
     let currentScore = this.drawScore.score

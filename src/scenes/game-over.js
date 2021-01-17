@@ -23,7 +23,7 @@ export class GameOver extends Scene {
   init(props) {
     super.init(props)
 
-    const { score, floorXPosition, birdController, pipes } = props
+    const { score, floorXPosition, birdController, pipes, backgroundImage } = props
 
     // Инициализируем положения объектов, когда возникла коллизия
     this.gameOverSoundPlayed = false
@@ -32,6 +32,7 @@ export class GameOver extends Scene {
     this.drawScore.setScore(score)
     this.drawFloor.setX(floorXPosition)
     this.pipes = pipes
+    this.backgroundImage = backgroundImage
 
     this.game.control.addListener(HotKeys.jump, this.newGame)
   }
@@ -59,7 +60,7 @@ export class GameOver extends Scene {
   }
 
   render(time) {
-    this.game.screen.drawImage(ImageType.backgroundDay)
+    this.game.screen.drawImage(this.backgroundImage)
 
     // Рисуем трубы
     this.pipes.forEach(({ top, bottom }) => {
