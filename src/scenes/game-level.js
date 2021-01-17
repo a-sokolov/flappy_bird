@@ -73,9 +73,10 @@ export class GameLevel extends Scene {
 
   /** Перезапуск игры */
   restart() {
-    if (this.game.isPause) {
+    if (this.game.isPause || this.isPending()) {
       return
     }
+
     this.finish(Scene.NEW_GAME)
   }
 

@@ -125,7 +125,7 @@ export class Game {
 
   /** Ставим/снимаем на/с паузу, только если текущая сцена "Игровой уровень" */
   pause() {
-    if (this.currentScene instanceof GameLevel) {
+    if (this.currentScene instanceof GameLevel && this.currentScene.isWorking()) {
       this.isPause = !this.isPause
 
       if (this.isPause) {
