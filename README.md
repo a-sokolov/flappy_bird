@@ -6,7 +6,5 @@
 3. Run command `npm install`
 
 ## Start 
-```
-npm run server
-```
-Open localhost:3000
+1. Run command `npm run server`
+2. Open localhost:3000
